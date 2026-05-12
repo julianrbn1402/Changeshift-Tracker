@@ -389,50 +389,56 @@ export default function App() {
       </main>
 
       {/* Hidden Report Container for html2canvas */}
-      <div className="fixed top-0 left-0 -z-50 pointer-events-none overflow-hidden h-0 w-0">
+      <div className="fixed -left-[2000px] top-0 pointer-events-none" aria-hidden="true">
         <div 
           ref={historyRef}
-          className="w-[500px] bg-[#020C1B] p-10 text-white font-sans"
+          className="w-[600px] bg-[#020C1B] p-10 text-white font-sans border border-slate-800"
+          style={{ minHeight: 'fit-content' }}
         >
-          <div className="border-b border-slate-800 pb-8 mb-8 flex justify-between items-end">
+          <div className="border-b-2 border-cyan-500/20 pb-8 mb-8 flex justify-between items-end">
             <div>
               <div className="flex items-center gap-2 mb-2 text-cyan-500">
                 <Truck className="w-6 h-6" />
-                <span className="font-bold text-[10px] uppercase tracking-widest">System Report</span>
+                <span className="font-mono font-bold text-[10px] uppercase tracking-[0.3em]">Official System Report</span>
               </div>
-              <h2 className="text-4xl font-black tracking-tighter leading-none">CHANGESHIFT<br /><span className="text-cyan-500">TRACKER</span></h2>
+              <h2 className="text-5xl font-black tracking-tighter leading-none">CHANGESHIFT<br /><span className="text-cyan-500">TRACKER</span></h2>
             </div>
             <div className="text-right">
-              <div className="text-slate-500 font-mono text-xs uppercase tracking-widest mb-1">Generated Date</div>
-              <div className="font-mono text-xl font-bold">{currentTime.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}</div>
+              <div className="text-slate-500 font-mono text-[10px] uppercase tracking-widest mb-1">Generated At</div>
+              <div className="font-mono text-lg font-bold">{currentTime.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}</div>
+              <div className="font-mono text-sm text-slate-400">{currentTime.toLocaleTimeString('id-ID')}</div>
             </div>
           </div>
 
           <div className="space-y-4">
-            <h3 className="text-slate-400 font-sans font-bold text-xs uppercase tracking-widest border-b border-slate-800/50 pb-2 flex justify-between">
-              <span>Completed Units</span>
-              <span className="text-cyan-500">{history.length} Total</span>
-            </h3>
+            <div className="flex justify-between items-center bg-[#112240]/50 p-3 border-l-4 border-cyan-500 rounded-r-lg mb-6">
+              <span className="font-sans font-bold text-xs uppercase tracking-widest text-slate-400">Status Ringkasan</span>
+              <span className="font-mono font-bold text-cyan-400">{history.length} UNIT SELESAI</span>
+            </div>
+
             {history.map((item) => (
-              <div key={item.id} className="bg-[#112240] p-5 rounded-xl border border-slate-800 flex justify-between items-center">
+              <div key={item.id} className="bg-[#112240] p-6 rounded-xl border border-slate-800 flex justify-between items-center shadow-lg">
                 <div>
-                  <div className="font-mono font-bold text-2xl text-white mb-1">{item.unitNumber}</div>
-                  <div className="flex gap-4 font-mono text-xs text-slate-500">
-                    <span>IN: {formatTime(item.entryTime)}</span>
-                    <span>OUT: {formatTime(item.exitTime)}</span>
+                  <div className="font-mono font-bold text-3xl text-white mb-2">{item.unitNumber}</div>
+                  <div className="flex gap-6 font-mono text-xs text-slate-500">
+                    <span className="flex items-center gap-1"><LogIn className="w-3 h-3" /> {formatTime(item.entryTime)}</span>
+                    <span className="flex items-center gap-1"><LogOut className="w-3 h-3" /> {formatTime(item.exitTime)}</span>
                   </div>
                 </div>
-                <div className="text-right">
-                  <div className="text-[10px] font-bold text-slate-600 uppercase tracking-widest">Duration</div>
-                  <div className="font-mono text-2xl font-bold text-cyan-400">{formatDuration(item.duration)}</div>
+                <div className="text-right bg-[#020C1B] p-3 rounded-lg border border-slate-800">
+                  <div className="text-[9px] font-bold text-slate-600 uppercase tracking-widest mb-1">Total Duration</div>
+                  <div className="font-mono text-2xl font-bold text-cyan-400 tracking-tighter">{formatDuration(item.duration)}</div>
                 </div>
               </div>
             ))}
           </div>
 
-          <div className="mt-12 pt-8 border-t border-slate-800 flex justify-between items-center opacity-40">
-            <span className="text-[10px] font-mono tracking-widest">INDUSTRIAL CORE SYSTEMS REPORT</span>
-            <span className="text-[10px] font-mono">v1.2</span>
+          <div className="mt-16 pt-8 border-t border-slate-800 flex justify-between items-center">
+            <div className="opacity-40">
+              <span className="text-[10px] font-mono tracking-[0.3em] uppercase">Security Verified Report</span>
+              <div className="text-[8px] font-mono mt-1">ID: {crypto.randomUUID().slice(0,8).toUpperCase()}</div>
+            </div>
+            <span className="text-[10px] font-mono opacity-40">INDUSTRIAL CORE SYSTEMS v1.2</span>
           </div>
         </div>
       </div>
