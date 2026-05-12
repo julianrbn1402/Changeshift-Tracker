@@ -17,7 +17,8 @@ import {
   Hash,
   Search,
   MessageCircle,
-  Share2
+  Share2,
+  Download
 } from 'lucide-react';
 
 interface ActiveTruck {
@@ -137,10 +138,16 @@ export default function App() {
       const url = canvas.toDataURL('image/png');
       const a = document.createElement('a');
       a.href = url;
-      a.download = `Report_Changeshift_${Date.now()}.png`;
+      a.download = `Changeshift_Report_${new Date().toISOString().split('T')[0]}.png`;
       a.click();
       
-      alert('Laporan Gambar telah diunduh! Silakan buka WhatsApp dan lampirkan gambar tersebut dari galeri Anda.');
+      // Brief delay before suggesting to open WhatsApp
+      setTimeout(() => {
+        if (confirm('Laporan gambar telah di-capture dan diunduh. Ingin membuka WhatsApp untuk melampirkannya?')) {
+          const text = encodeURIComponent(`*LAPORAN CHANGESHIFT*\nTanggal: ${new Date().toLocaleDateString('id-ID')}\n(Silakan lampirkan gambar yang baru saja diunduh)`);
+          window.open(`https://wa.me/?text=${text}`, '_blank');
+        }
+      }, 500);
     } catch (error) {
       console.error('Error handling report:', error);
       alert('Gagal memproses laporan gambar.');
@@ -359,30 +366,22 @@ export default function App() {
           {history.length > 0 && (
             <div className="mt-6 pt-6 border-t border-slate-800 flex flex-col gap-3">
               <button 
-                onClick={handleShareWhatsAppText}
-                className="w-full bg-[#25D366] hover:bg-[#128C7E] text-white py-3 md:py-4 rounded-xl font-extrabold uppercase text-xs md:text-sm tracking-widest flex items-center justify-center gap-3 transition-all active:scale-[0.98] shadow-lg shadow-emerald-900/20"
-              >
-                <MessageCircle className="w-5 h-5" />
-                <span>Kirim Teks ke WhatsApp</span>
-              </button>
-              
-              <button 
                 onClick={handleDownloadImage}
                 disabled={isSharing}
-                className="w-full bg-slate-800 hover:bg-slate-700 disabled:bg-slate-900 text-white py-3 md:py-4 rounded-xl font-bold uppercase text-[10px] md:text-xs tracking-widest flex items-center justify-center gap-3 transition-all active:scale-[0.98]"
+                className="w-full bg-[#25D366] hover:bg-[#128C7E] disabled:bg-emerald-900/50 text-white py-3 rounded-xl font-extrabold uppercase text-[10px] md:text-xs tracking-[0.2em] flex items-center justify-center gap-2 transition-all active:scale-[0.98] shadow-lg shadow-emerald-900/10"
               >
                 {isSharing ? (
-                  <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                  <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
                 ) : (
                   <>
-                    <Download className="w-4 h-4" />
-                    <span>Download Gambar Laporan</span>
+                    <MessageCircle className="w-4 h-4" />
+                    <span>Share via WhatsApp</span>
                   </>
                 )}
               </button>
               
-              <p className="text-[8px] md:text-[9px] text-slate-600 text-center font-mono uppercase tracking-[0.2em] mt-1">
-                Gunakan "Kirim Teks" untuk berbagi cepat via WhatsApp
+              <p className="text-[8px] text-slate-600 text-center font-mono uppercase tracking-[0.15em] leading-relaxed">
+                Klik untuk capture laporan gambar & bagikan ke grup
               </p>
             </div>
           )}
